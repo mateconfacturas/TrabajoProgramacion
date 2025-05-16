@@ -7,7 +7,11 @@ Se evaluará prolijidad, solución elegida, TAD elegidos, separación en varios 
 
 #include <stdio.h>
 #include <stdlib.h>
-
+typedef struct snodo{
+    char nombre; 
+    struct snodo *sig; 
+}tnodo; 
+typedef tnodo *tpuntero; 
 int main(){
    int endswitch = 1; 
    int option;
@@ -48,7 +52,7 @@ FILE *archivo;
     char linea[256]; // Asumimos que ninguna línea excederá los 255 caracteres
 
     // Abrir el archivo en modo lectura ("r")
-    archivo = fopen(nombreArchivo, "r");
+    archivo = fopen(aves.txt, "r");
 
     // Verificar si el archivo se abrió correctamente
     if (archivo == NULL) {
@@ -60,7 +64,7 @@ FILE *archivo;
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
         //
         // Insertar de manera ordenada en la lista
-        //
+
     }
 
     // Cerrar el archivo para liberar los recursos
