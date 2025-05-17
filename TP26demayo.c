@@ -7,6 +7,7 @@ Se evaluará prolijidad, solución elegida, TAD elegidos, separación en varios 
 
 #include <stdio.h>
 #include <stdlib.h>
+void cargarArchivos(); 
 typedef struct snodo{
     char nombre; 
     struct snodo *sig; 
@@ -24,6 +25,7 @@ int main(){
         case 1: 
                // imprimirReptiles(); 
                printf("Dentro de case 1\n");
+               //cargarArchivos();
         break; 
         case 2: 
                 //imprimirPeces(); 
@@ -32,41 +34,78 @@ int main(){
         case 3: 
                 //imprimirAves(); 
                 printf("Dentro de case 3\n");
+              
         break; 
         case 4: 
                 //imprimirMamiferos(); 
                 printf("Dentro de case 4\n");
+                cargarArchivos();
         break; 
         case 5:
-                end=0; 
+                endswitch=0; 
                 printf("Hasta Pronto!\n");
         break;  
     }
-} while ( end > 0 );
+} while ( endswitch > 0 );
  
     return 0; 
 }
 
 void cargarArchivos(){
-FILE *archivo;
+ FILE *archivo;
     char linea[256]; // Asumimos que ninguna línea excederá los 255 caracteres
 
-    // Abrir el archivo en modo lectura ("r")
-    archivo = fopen(aves.txt, "r");
-
-    // Verificar si el archivo se abrió correctamente
-    if (archivo == NULL) {
-        perror("Error al abrir el archivo");
-        return; // Salir de la función si no se pudo abrir el archivo
+    // Abrir y leer mamiferos.txt
+    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\mamiferos.txt", "r");
+    if (archivo == NULL){ 
+        perror("Error"); return; 
     }
-
-    // Leer el archivo línea por línea hasta el final del archivo (EOF)
     while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        //
-        // Insertar de manera ordenada en la lista
-
+    tpuntero nuevo = (tpuntero)malloc(sizeof(tnodo));
+        if (nuevo == NULL) {
+            perror("Error al asignar memoria");
+            fclose(archivo);
+            return;
+        }
+        nuevo->nombre = linea[0]; // Asignar el primer carácter de la línea al nodo
+        nuevo->sig = NULL; // Inicializar el siguiente puntero a NULL
+        printf("%s", linea); // Imprimir la línea leída
     }
-
-    // Cerrar el archivo para liberar los recursos
     fclose(archivo);
+    printf("\n\n");
+    /*
+    // Abrir y leer aves.txt
+    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\aves.txt", "r");
+    if (archivo == NULL){ 
+        perror("Error"); return; 
+    }
+    while (fgets(linea, sizeof(linea), archivo) != NULL) {
+        printf("%s", linea);
+    }
+    fclose(archivo);
+    // ...y así con los otros archivos
+    printf("\n\n");
+        // Abrir y leer Reptiles.txt
+    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\Reptiles.txt", "r");
+    if (archivo == NULL){ 
+        perror("Error"); return; 
+    }
+    while (fgets(linea, sizeof(linea), archivo) != NULL) {
+        printf("%s", linea);
+    }
+    fclose(archivo);
+    // ...y así con los otros archivos
+    printf("\n\n");
+
+        // Abrir y leer peces.txt
+    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\peces.txt", "r");
+    if (archivo == NULL){ 
+        perror("Error"); return; 
+    }
+    while (fgets(linea, sizeof(linea), archivo) != NULL) {
+        printf("%s", linea);
+    }
+    fclose(archivo);
+    // ...y así con los otros archivos
+    printf("\n\n");*/
 }
