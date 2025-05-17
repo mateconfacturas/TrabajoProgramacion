@@ -7,39 +7,45 @@ Se evaluará prolijidad, solución elegida, TAD elegidos, separación en varios 
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 void cargarArchivos(); 
-typedef struct snodo{
-    char nombre; 
-    struct snodo *sig; 
-}tnodo; 
+        typedef struct snodo{
+        char nombre[256]; // Ahora almacena toda la línea
+        struct snodo *sig;
+    } tnodo; 
 typedef tnodo *tpuntero; 
+
 int main(){
    int endswitch = 1; 
    int option;
     
+    cargarArchivo("mamiferos.txt", &cabezaMamiferos);
+    cargarArchivo("aves.txt", &cabezaAves);
+    cargarArchivo("reptiles.txt", &cabezaReptiles);
+    cargarArchivo("peces.txt", &cabezaPeces);
+    
+    tpuntero cabezaMamiferos = NULL; 
+    tpuntero cabezaAves = NULL;
+    tpuntero cabezaPeces = NULL;
+    tpuntero cabezaReptiles = NULL; 
+
   do{ 
     printf("Elija una categoria: \n");
     printf(" (1)Reptiles \n (2)Peces \n (3)Aves \n (4)Mamiferos \n (5)Finalizar programa \n\n");
     scanf("%i",&option); 
     switch(option){
         case 1: 
-               // imprimirReptiles(); 
-               printf("Dentro de case 1\n");
-               //cargarArchivos();
+          imprimirLista(cabezaReptiles);           
         break; 
         case 2: 
-                //imprimirPeces(); 
-                printf("Dentro de case 2\n");
+        imprimirLista(cabezaPeces);
         break; 
         case 3: 
-                //imprimirAves(); 
-                printf("Dentro de case 3\n");
-              
+                imprimirLista(cabezaAves);             
         break; 
-        case 4: 
-                //imprimirMamiferos(); 
-                printf("Dentro de case 4\n");
-                cargarArchivos();
+        case 4:
+                imprimirLista(cabezaMamiferos);
         break; 
         case 5:
                 endswitch=0; 
@@ -51,12 +57,10 @@ int main(){
     return 0; 
 }
 
-void cargarArchivos(){
- FILE *archivo;
+void cargarArchivos(const char *nombreArchivo, tpuntero *cabeza){
+ FILE *archivo= fopen(nombreArchivo, "r");
     char linea[256]; // Asumimos que ninguna línea excederá los 255 caracteres
-
-    // Abrir y leer mamiferos.txt
-    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\mamiferos.txt", "r");
+    tpuntero ultimo = NULL; // Inicializar el puntero último a NULL 
     if (archivo == NULL){ 
         perror("Error"); return; 
     }
@@ -67,45 +71,25 @@ void cargarArchivos(){
             fclose(archivo);
             return;
         }
-        nuevo->nombre = linea[0]; // Asignar el primer carácter de la línea al nodo
-        nuevo->sig = NULL; // Inicializar el siguiente puntero a NULL
-        printf("%s", linea); // Imprimir la línea leída
+        strcpy(nuevo->nombre, linea); // Copiar la línea leída al nuevo nodo 
+        nuevo->sig = NULL; // Inicializar el siguiente nodo a NULL 
+        if(*cabeza == NULL){
+            *cabeza = nuevo; 
+            ultimo= nuevo; 
+        }
+        else{
+            ultimo->sig = nuevo; // Enlazar el nuevo nodo al final de la lista
+            ultimo = nuevo; // Actualizar el último nodo 
+        }
     }
     fclose(archivo);
     printf("\n\n");
-    /*
-    // Abrir y leer aves.txt
-    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\aves.txt", "r");
-    if (archivo == NULL){ 
-        perror("Error"); return; 
-    }
-    while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s", linea);
-    }
-    fclose(archivo);
-    // ...y así con los otros archivos
-    printf("\n\n");
-        // Abrir y leer Reptiles.txt
-    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\Reptiles.txt", "r");
-    if (archivo == NULL){ 
-        perror("Error"); return; 
-    }
-    while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s", linea);
-    }
-    fclose(archivo);
-    // ...y así con los otros archivos
-    printf("\n\n");
+}
 
-        // Abrir y leer peces.txt
-    archivo = fopen("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\peces.txt", "r");
-    if (archivo == NULL){ 
-        perror("Error"); return; 
+void imprimirLista(tpuntero cabeza){
+    tpuntero aux = cabeza; 
+    while (aux != NULL) {
+        printf("%s", aux->nombre); // Imprimir el nombre del animal
+        aux = aux->sig; // Avanzar al siguiente nodo
     }
-    while (fgets(linea, sizeof(linea), archivo) != NULL) {
-        printf("%s", linea);
-    }
-    fclose(archivo);
-    // ...y así con los otros archivos
-    printf("\n\n");*/
 }
