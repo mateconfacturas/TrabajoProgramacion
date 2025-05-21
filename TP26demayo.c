@@ -8,30 +8,27 @@ Se evaluará prolijidad, solución elegida, TAD elegidos, separación en varios 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-void cargarArchivos(); 
         typedef struct snodo{
         char nombre[256]; // Ahora almacena toda la línea
         struct snodo *sig;
     } tnodo; 
 typedef tnodo *tpuntero; 
-
+void cargarArchivos(const char *nombreArchivo, tpuntero *cabeza); 
+void imprimirLista(tpuntero cabeza);
 int main(){
    int endswitch = 1; 
    int option;
-    
-    cargarArchivo("mamiferos.txt", &cabezaMamiferos);
-    cargarArchivo("aves.txt", &cabezaAves);
-    cargarArchivo("reptiles.txt", &cabezaReptiles);
-    cargarArchivo("peces.txt", &cabezaPeces);
-    
     tpuntero cabezaMamiferos = NULL; 
     tpuntero cabezaAves = NULL;
     tpuntero cabezaPeces = NULL;
     tpuntero cabezaReptiles = NULL; 
-
+    cargarArchivos("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\mamiferos.txt", &cabezaMamiferos);
+    cargarArchivos("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\aves.txt", &cabezaAves);
+    cargarArchivos("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\Reptiles.txt", &cabezaReptiles);
+    cargarArchivos("C:\\Users\\guerr\\OneDrive\\Escritorio\\Codigos C\\peces.txt", &cabezaPeces);
+    
   do{ 
-    printf("Elija una categoria: \n");
+    printf("\n\n Elija una categoria: \n");
     printf(" (1)Reptiles \n (2)Peces \n (3)Aves \n (4)Mamiferos \n (5)Finalizar programa \n\n");
     scanf("%i",&option); 
     switch(option){
