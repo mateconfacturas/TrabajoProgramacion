@@ -4,9 +4,9 @@
 #include "tp26mayo.h"
 
 
-void imprimirLista(tpuntero cabeza)
+void imprimirLista(lista cabeza)
 {
-    tpuntero aux = cabeza;
+    lista aux = cabeza;
     while (aux != NULL)
     {
         printf(" - %s", aux->nombre); // Imprimir el nombre del animal
@@ -14,9 +14,9 @@ void imprimirLista(tpuntero cabeza)
     }
 }
 
-void cantidadAnimales(tpuntero cabeza, int cantidad)
+void cantidadAnimales(lista cabeza, int cantidad)
 {
-    tpuntero aux = cabeza;
+    lista aux = cabeza;
     int i = 0;
 
     while (aux != NULL && i < cantidad)
@@ -27,7 +27,7 @@ void cantidadAnimales(tpuntero cabeza, int cantidad)
     }
 }
 
-int contarNodos(tpuntero cabeza) {
+int contarNodos(lista cabeza) {
     int contador = 0;
     while (cabeza != NULL) {
         contador++;
@@ -36,12 +36,25 @@ int contarNodos(tpuntero cabeza) {
     return contador;
 }
 
-void cargarArchivo(const char *nombreArchivo, tpuntero *cabeza)
+void liberarListas(Nodo** cabeza) {
+    Nodo* actual = *cabeza;
+    Nodo* temp;
+
+    while (actual != NULL) {
+        temp = actual;
+        actual = actual->sig;
+        free(temp);
+    }
+
+    *cabeza = NULL;  // Importante: evitar punteros colgantes
+}
+
+void cargarArchivo(const char *nombreArchivo, lista *cabeza)
 {
 
     FILE *archivo = fopen(nombreArchivo, "r");
     char linea[256];        // Asumimos que ninguna línea excederá los 255 caracteres
-    tpuntero ultimo = NULL; // Inicializar el puntero último a NULL
+    lista ultimo = NULL; // Inicializar el puntero último a NULL
 
     if (archivo == NULL)
     {
@@ -51,10 +64,10 @@ void cargarArchivo(const char *nombreArchivo, tpuntero *cabeza)
     }
     while (fgets(linea, sizeof(linea), archivo) != NULL)
     {
-        tpuntero nuevo = (tpuntero)malloc(sizeof(tnodo));
+        lista nuevo = (lista)malloc(sizeof(Nodo));
         if (nuevo == NULL)
         {
-            perror("Error al asignar memoria");
+            printf("Error al asignar memoria");
             fclose(archivo);
             return;
         }
