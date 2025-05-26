@@ -36,19 +36,83 @@ int contarNodos(lista cabeza) {
     return contador;
 }
 
-void liberarListas(Nodo** cabeza) {
-    Nodo* actual = *cabeza;
-    Nodo* temp;
 
+void liberarLista(lista* cabeza) {
+    lista actual = cabeza;  // lista es equivalente a Nodo
     while (actual != NULL) {
-        temp = actual;
+        lista temp = actual; // temp es del mismo tipo que actual (Nodo*)
         actual = actual->sig;
         free(temp);
     }
+    *cabeza = NULL; // Importante para evitar "dangling pointers"
+}
+void seleccionarAnimalesAzar(lista original, int cantidad, lista* seleccionados) {
+    //contar animales
+    int total = contarNodos(original);
+    if (cantidad > total) cantidad = total;
 
-    *cabeza = NULL;  // Importante: evitar punteros colgantes
+    //cargar los nodos en un arreglo
+    lista aux = original;
+    char** arreglo = malloc(total * sizeof(char*));
+    for (int i = 0; i < total && aux != NULL; i++) {
+        arreglo[i] = aux->nombre;
+        aux = aux->sig;
+    }
+
+    //seleccionar aleatoriamente sin repetir
+    srand(time(NULL));
+    int elegidos = 0;
+    while (elegidos < cantidad) {
+        int pos = rand() % total;
+        char* candidato = arreglo[pos];
+        if (yaSeleccionado(*seleccionados, candidato) == 0) {
+            agregarALista(seleccionados, candidato);
+            elegidos++;
+        }
+    }
+
+    //mostrar seleccionados
+    printf("\nAnimales seleccionados al azar:\n");
+    imprimirLista(seleccionados);
+
+    free(arreglo);
+}
+void imprimirLista(lista cabeza)
+{
+    lista aux = cabeza;
+    while (aux != NULL)
+    {
+        printf(" - %s", aux->nombre); // Imprimir el nombre del animal
+        aux = aux->sig;               // Avanzar al siguiente nodo
+    }
+}
+int yaSeleccionado(lista listaSeleccionados, const char* nombre) {
+    while (listaSeleccionados != NULL) {
+        if (strcmp(listaSeleccionados->nombre, nombre) == 0)
+            return 1; // ya fue elegido
+        listaSeleccionados = listaSeleccionados->sig;
+    }
+    return 0;
 }
 
+void agregarALista(lista* cabeza, const char* nombre) {
+    lista nuevo = (lista)malloc(sizeof(Nodo));
+    if (nuevo == NULL) {
+        printf("Error al asignar memoria.\n");
+        return;
+    }
+    strcpy(nuevo->nombre, nombre);
+    nuevo->sig = NULL;
+
+    if (*cabeza == NULL) {
+        *cabeza = nuevo;
+    } else {
+        lista aux = *cabeza;
+        while (aux->sig != NULL)
+            aux = aux->sig;
+        aux->sig = nuevo;
+    }
+}
 void cargarArchivo(const char *nombreArchivo, lista *cabeza)
 {
 

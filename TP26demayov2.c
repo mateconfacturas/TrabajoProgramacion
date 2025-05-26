@@ -8,104 +8,7 @@ Se evaluará prolijidad, solución elegida, TAD elegidos, separación en varios 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct Nodo
-{
-    char nombre[256]; // Ahora almacena toda la línea
-    struct Nodo *sig;
-} Nodo;
-
-typedef Nodo *lista;
-
-void cargarArchivo(const char *nombreArchivo, lista *cabeza)
-{
-
-    FILE *archivo = fopen(nombreArchivo, "r");
-    char linea[256];        // Asumimos que ninguna línea excederá los 255 caracteres
-    lista ultimo = NULL; // Inicializar el puntero último a NULL
-
-    if (archivo == NULL)
-    {
-        printf("No se pudo abrir el archivo %s\n", nombreArchivo);
-        printf("Error");
-        return;
-    }
-    while (fgets(linea, sizeof(linea), archivo) != NULL)
-    {
-        lista nuevo = (lista)malloc(sizeof(Nodo));
-        if (nuevo == NULL)
-        {
-            printf("Error al asignar memoria");
-            fclose(archivo);
-            return;
-        }
-        strcpy(nuevo->nombre, linea); // Copiar la línea leída al nuevo nodo
-        nuevo->sig = NULL;            // Inicializar el siguiente nodo a NULL
-
-        if (*cabeza == NULL)
-        {
-            *cabeza = nuevo;
-            ultimo = nuevo;
-        }
-        else
-        {
-            ultimo->sig = nuevo; // Enlazar el nuevo nodo al final de la lista
-            ultimo = nuevo;      // Actualizar el último nodo
-        }
-    }
-    fclose(archivo);
-}
-
-/*void imprimirLista(tpuntero cabeza)
-{
-    tpuntero aux = cabeza;
-    while (aux != NULL)
-    {
-        printf(" - %s", aux->nombre); // Imprimir el nombre del animal
-        aux = aux->sig;               // Avanzar al siguiente nodo
-    }
-}
-*/
-
-void cantidadAnimales(lista cabeza, int cantidad)
-{
-    lista aux = cabeza;
-    int i = 0;
-
-    while (aux != NULL && i < cantidad)
-    {
-        printf("%s", aux->nombre);
-        aux = aux->sig;
-        i++;
-    }
-}
-
-int contarNodos(lista cabeza) {
-    int contador = 0;
-    while (cabeza != NULL) {
-        contador++;
-        cabeza = cabeza->sig;
-    }
-    return contador;
-}
-
-void liberarListas(lista* cabeza){
-
-    Nodo* actual = *cabeza
-    while (cabeza != NULL) {
-        Nodo* temp = cabeza;
-        cabeza = cabeza->sig;
-        free(temp);
-    }
-}
-
-
-
-
-
-
-
-
+#include "tp26mayo.h"
 
 int main()
 {
@@ -118,10 +21,10 @@ int main()
     lista cabezaPeces = NULL;
     lista cabezaReptiles = NULL;
 
-    cargarArchivo("mamiferos.txt", &cabezaMamiferos);
-    cargarArchivo("aves.txt", &cabezaAves);
-    cargarArchivo("Reptiles.txt", &cabezaReptiles);
-    cargarArchivo("peces.txt", &cabezaPeces);
+    cargarArchivo("C:\\Users\\caro\\Documents\\GitHub\\TrabajoProgramacion\\mamiferos.txt", &cabezaMamiferos);
+    cargarArchivo("C:\\Users\\caro\\Documents\\GitHub\\TrabajoProgramacion\\aves.txt", &cabezaAves);
+    cargarArchivo("C:\\Users\\caro\\Documents\\GitHub\\TrabajoProgramacion\\Reptiles.txt", &cabezaReptiles);
+    cargarArchivo("C:\\Users\\caro\\Documents\\GitHub\\TrabajoProgramacion\\peces.txt", &cabezaPeces);
 
     do
     {
@@ -206,69 +109,11 @@ int main()
 
 
     
+    liberarLista(&cabezaAves);
+    liberarLista(&cabezaMamiferos);
+    liberarLista(&cabezaReptiles);
+    liberarLista(&cabezaPeces);
 
     return 0;
 }
 
-/*#include <time.h>
-
-int yaSeleccionado(lista listaSeleccionados, const char* nombre) {
-    while (listaSeleccionados != NULL) {
-        if (strcmp(listaSeleccionados->nombre, nombre) == 0)
-            return 1; // ya fue elegido
-        listaSeleccionados = listaSeleccionados->sig;
-    }
-    return 0;
-}
-
-void agregarALista(lista* cabeza, const char* nombre) {
-    lista nuevo = (lista)malloc(sizeof(Nodo));
-    if (nuevo == NULL) {
-        printf("Error al asignar memoria.\n");
-        return;
-    }
-    strcpy(nuevo->nombre, nombre);
-    nuevo->sig = NULL;
-
-    if (*cabeza == NULL) {
-        *cabeza = nuevo;
-    } else {
-        lista aux = *cabeza;
-        while (aux->sig != NULL)
-            aux = aux->sig;
-        aux->sig = nuevo;
-    }
-}
-
-void seleccionarAnimalesAzar(lista original, int cantidad, lista* seleccionados) {
-    // Paso 1: contar animales
-    int total = contarNodos(original);
-    if (cantidad > total) cantidad = total;
-
-    // Paso 2: cargar los nodos en un arreglo
-    lista aux = original;
-    char** arreglo = malloc(total * sizeof(char*));
-    for (int i = 0; i < total && aux != NULL; i++) {
-        arreglo[i] = aux->nombre;
-        aux = aux->sig;
-    }
-
-    // Paso 3: seleccionar aleatoriamente sin repetir
-    srand(time(NULL));
-    int elegidos = 0;
-    while (elegidos < cantidad) {
-        int pos = rand() % total;
-        char* candidato = arreglo[pos];
-        if (!yaSeleccionado(*seleccionados, candidato)) {
-            agregarALista(seleccionados, candidato);
-            elegidos++;
-        }
-    }
-
-    // Paso 4: mostrar seleccionados
-    printf("\nAnimales seleccionados al azar:\n");
-    imprimirLista(*seleccionados);
-
-    free(arreglo);
-}
-*/

@@ -13,10 +13,7 @@ void cargarArchivo(const char *nombreArchivo, lista *cabeza);
 void cantidadAnimales(lista cabeza, int cantidad);
 void imprimirLista(lista );
 int contarNodos(lista cabeza);
-void liberarListas(lista cabeza);
-
-
-
+void liberarLista(lista* cabeza);
 
 
 #endif
